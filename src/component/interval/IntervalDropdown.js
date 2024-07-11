@@ -12,9 +12,9 @@ const Dropdown = ({ options, onSelect }) => {
   return (
     <div>
       <select value={selectedOption} onChange={handleSelect}>
-        <option value="" disabled>
+        {/* <option value="" disabled>
           Select an option
-        </option>
+        </option> */}
         {options.map((option, index) => (
           <option key={index} value={option}>
             {option}

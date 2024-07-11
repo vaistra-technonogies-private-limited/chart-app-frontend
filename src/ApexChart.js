@@ -216,7 +216,7 @@ class ApexChart extends Component {
 
     axios
       .get(
-        `http://localhost:8081/stock/candle?instrumentKey=NSE_EQ%7CINE552Z01027&interval=${interval}`
+        `http://localhost:8081/stock/candle?instrumentKey=NSE_EQ%7CINE065X01017&interval=${interval}`
         // `http://localhost:8081/stock/historicalCandle?instrumentKey=NSE_INDEX%7CNifty Bank&interval=${interval}&toDate=2024-01-01&fromDate=2024-01-01`
       )
       .then((response) => {

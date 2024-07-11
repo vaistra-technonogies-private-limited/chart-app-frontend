@@ -10,7 +10,7 @@ const Navbar = ({
 }) => {
   return (
     <nav className="navbar">
-      <h1>Vaistra Trading Analytics</h1>
+      <h1>Vaistra Trade Analytics</h1>
       <div className="dropdowns">
         <Dropdown
           options={intervalOptions}
