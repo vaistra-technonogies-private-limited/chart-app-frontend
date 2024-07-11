@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,29 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+/* src/App.css */
+
+.navbar {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  background-color: #282c34;
+  padding: 1rem;
+  color: white;
+}
+
+.navbar h1 {
+  margin: 0;
+}
+
+.dropdowns {
+  display: flex;
+  gap: 1rem;
+  margin-left: 20px;
+}
+
+.dropdown label {
+  margin-right: 0.5rem;
 }
