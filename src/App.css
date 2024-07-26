@@ -14,6 +14,7 @@
 /* Navbar title */
 .navbar h1 {
   margin: 0;
+  width: 300px;
   font-size: 1.5rem;
   font-weight: bold;
 }
@@ -27,6 +28,7 @@
 
 /* Individual dropdown container */
 .dropdowns {
+  width: 100%;
   position: relative;
 }
 
@@ -52,6 +54,241 @@
   outline: none;
 }
 
+/* Container for MultiSelect Dropdowns */
+.multiselect_dropdown {
+  width: 300px;
+  position: relative;
+}
+
+/* Style for the MultiSelect Dropdown select element */
+.rmsc .dropdown-heading {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover and focus states for MultiSelect Dropdown select */
+.rmsc .dropdown-heading:hover,
+.rmsc .dropdown-heading:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Style for the MultiSelect Dropdown options */
+.rmsc .dropdown-content {
+  color: #333;
+  background-color: #333;
+}
+
+#ohlc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #d6d7d9;
+  border-top: 1px dashed #9f9f9f;
+  border-radius: 0px;
+  padding: 5px;
+  margin-top: 0px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+#ohlc-values {
+  display: flex;
+  align-items: center;
+}
+
+#ohlc-values p {
+  display: flex;
+  margin: 5px;
+  padding: auto;
+  color: #ffffff;
+}
+
+#ohlc-change {
+  display: flex;
+  align-items: center;
+}
+
+#ohlc-change p {
+  margin: 0;
+  padding-right: 10px;
+  color: #ffffff;
+}
+
+/* Date selector container */
+#date-selectors {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
+  position: relative;
+}
+
+/* Individual date picker container */
+#date-selectors span {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Date picker label */
+#date-selectors span::before {
+  content: attr(data-label);
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+/* DatePickerComponent styling */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  width: 200px;
+  padding: 10px 15px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.react-datepicker__input-container input:hover,
+.react-datepicker__input-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: #1c1f25;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 700px;
+  max-width: 100%;
+  box-shadow: 0 5px 15px rgba(2, 20, 44, 0.793);
+  position: relative;
+  z-index: 1001;
+  height: 600px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+/* Modal close icon styling */
+.close-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #1c1f25;
+  margin-left: auto;
+}
+
+.close-icon:hover {
+  color: #007BFF;
+}
+.modal-title {
+  margin: 0;
+}
+
+.button {
+  margin-left: auto;
+  padding: 10px 20px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 5px 15px rgba(2, 20, 44, 0.793);
+
+}
+
+.button:hover {
+  background: #333;
+    border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Prevent background scrolling when modal is open */
+.modal-open {
+  overflow: hidden;
+  background-color: #55555549;
+}
+
+/* Modal search box styling */
+.search-box {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin: 10px;
+}
+
+.search-box:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* List styling */
+.item-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 500px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+.item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.item:hover, .item.selected {
+  background-color: #3d679537;
+  color: black;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .dropdowns {
@@ -61,5 +298,41 @@
 
   .dropdown {
     width: 100%;
+  }
+
+  .multiselect_dropdown {
+    width: 100%;
+  }
+
+  #date-selectors {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: baseline; /* Align items to center */
+    width: auto;
+
+  }
+
+  .react-datepicker__input-container input {
+    width: auto;
+  }
+
+  #ohlc-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #ohlc-values,
+  #ohlc-change {
+    flex-direction: column;
+    align-items: flex-start;
+    width: auto;
+    margin-top: 1rem;
+  }
+
+  #ohlc-values p,
+  #ohlc-change p {
+    /* display: flex; */
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
