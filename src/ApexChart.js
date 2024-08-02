@@ -632,6 +632,7 @@ class ApexChart extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.interval !== this.props.interval ||
+      prevProps.selectedSymbol !== this.props.selectedSymbol ||
       prevProps.indicators !== this.props.indicators ||
       prevState.toDate !== this.state.toDate ||
       prevState.fromDate !== this.state.fromDate
@@ -649,15 +650,17 @@ class ApexChart extends Component {
   };
 
   fetchData() {
-    const { interval, indicators } = this.props;
+    const { interval, indicators, selectedSymbol } = this.props;
     const { toDate, fromDate } = this.state;
 
     const today = new Date().toISOString().split('T')[0];
     const isTodaySelected = toDate.toISOString().split('T')[0] === today && fromDate.toISOString().split('T')[0] === today;
 
     const url = isTodaySelected
-      ? `http://localhost:8081/stock/candle?instrumentKey=NSE_EQ%7CINE065X01017&interval=${interval}`
-      : `http://localhost:8081/stock/historicalCandle?instrumentKey=NSE_EQ%7CINE065X01017&interval=${interval}&toDate=${toDate.toISOString().split('T')[0]}&fromDate=${fromDate.toISOString().split('T')[0]}`;
+      ? `http://localhost:8081/stock/candle?instrumentKey=${selectedSymbol['symbol']}&interval=${interval}`
+      // ? `http://localhost:8081/stock/candle?instrumentKey=NSE_INDEX%7CNifty Bank&interval=${interval}`
+      : `http://localhost:8081/stock/historicalCandle?instrumentKey=${selectedSymbol['symbol']}&interval=${interval}&toDate=${toDate.toISOString().split('T')[0]}&fromDate=${fromDate.toISOString().split('T')[0]}`;
+    // : `http://localhost:8081/stock/historicalCandle?instrumentKey=NSE_INDEX%7CNifty Bank&interval=${interval}&toDate=${toDate.toISOString().split('T')[0]}&fromDate=${fromDate.toISOString().split('T')[0]}`;
 
     axios
       .get(url) // Ensure withCredentials is set to true

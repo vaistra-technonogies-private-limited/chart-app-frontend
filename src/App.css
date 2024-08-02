@@ -336,3 +336,11 @@
     align-items: flex-start;
   }
 }
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adjust the gap as needed */
+}
+
+

@@ -1,11 +1,55 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import debounce from 'lodash.debounce';
 
-const Modal = ({ show, onClose, items }) => {
+const Modal = ({ show, onClose, items, setItems, onItemSelect }) => {
   const modalRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState({ symbolName: 'Nifty Bank', market: '' });
+
+  const fetchSearchResults = async (keyword) => {
+    const url = keyword
+      ? `http://localhost:8081/StockProfile?keyword=${keyword}`
+      : 'http://localhost:8081/StockProfile?pageNumber=0&pageSize=20';
+
+    try {
+      const response = await axios.get(url);
+      if (response.data.success) {
+        // const items = response.data.data.map((item) => ({
+        //   symbolName: item.symbolName,
+        //   market: item.market,
+        // }));
+        setItems(response.data.data);
+      } else {
+        console.error('Error fetching symbols:', response.data);
+        setItems([]);
+      }
+    } catch (error) {
+      console.error('Error fetching symbols:', error);
+      setItems([]);
+    }
+  };
+
+  const debouncedFetchSearchResults = useCallback(
+    debounce((keyword) => {
+      fetchSearchResults(keyword);
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    if (searchTerm.length >= 3) {
+      setItems([]); // Clear the items before fetching new ones
+      debouncedFetchSearchResults(searchTerm);
+    } else if (searchTerm.length <= 3) {
+      setItems([]); // Clear the items before fetching new ones
+      debouncedFetchSearchResults(searchTerm);
+    } else {
+      fetchSearchResults('');
+    }
+  }, [searchTerm, debouncedFetchSearchResults]);
 
   useEffect(() => {
     const { current: modal } = modalRef;
@@ -56,15 +100,13 @@ const Modal = ({ show, onClose, items }) => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+    // setItems([]); // Clear items when search term changes
   };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
+    onItemSelect(item);
   };
-
-  const filteredItems = items.filter((item) =>
-    item.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="modal-overlay">
@@ -73,7 +115,7 @@ const Modal = ({ show, onClose, items }) => {
           <h4 className="modal-title">Symbol Search</h4>
           <FontAwesomeIcon icon={faTimes} className="close-icon" onClick={onClose} />
         </div>
-        <hr></hr>
+        <hr />
         <div className="modal-body">
           <input
             type="text"
@@ -83,13 +125,13 @@ const Modal = ({ show, onClose, items }) => {
             onChange={handleSearchChange}
           />
           <ul className="item-list">
-            {filteredItems.map((item) => (
+            {items.map((item) => (
               <li
-                key={item}
-                className={`item ${item === selectedItem ? 'selected' : ''}`}
+                key={item.symbolName}
+                className={`item ${item.symbolName === selectedItem.symbolName ? 'selected' : ''}`}
                 onClick={() => handleItemClick(item)}
               >
-                {item}
+                {item.symbolName} - {item.market}
               </li>
             ))}
           </ul>

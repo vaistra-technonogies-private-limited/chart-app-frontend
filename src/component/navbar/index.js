@@ -1,59 +1,34 @@
-// import React from "react";
-// import Dropdown from "../interval/IntervalDropdown";
-// import IndicatorsDropdown from "../indicator";
-
-// const Navbar = ({
-//   intervalOptions,
-//   indicatorOptions,
-//   onIntervalSelect,
-//   onIndicatorSelect,
-// }) => {
-//   return (
-//     <nav className="navbar">
-//       <h1>Vaistra Trade Analytics</h1>
-//       <div className="dropdowns">
-//         <Dropdown
-//           options={intervalOptions}
-//           onSelect={onIntervalSelect}
-//           label="Interval"
-//         />
-//         <IndicatorsDropdown
-//           options={indicatorOptions}
-//           onSelect={onIndicatorSelect}
-//           label="Indicators"
-//         />
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
-
 import Dropdown from "../interval";
 import IndicatorsDropdown from "../indicator";
 import Modal from "../customModel/index";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({
   intervalOptions,
   indicatorOptions,
   onIntervalSelect,
   onIndicatorSelect,
+  onHandleItemSelect,
+  closeModal,
+  openModal,
+  showModal,
+  selectedSymbol 
 }) => {
-
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  // const [selectedSymbol, setSelectedSymbol] = useState({ symbolName: 'Nifty Bank', market: '' });
 
-  const openModal = () => {
-    setShowModal(true);
-  };
+  // const openModal = () => {
+  //   setShowModal(true);
+  // };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  // const closeModal = () => {
+  //   setShowModal(false);
+  // };
 
   useEffect(() => {
     if (showModal) {
@@ -65,10 +40,13 @@ const Navbar = ({
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/StockProfile?pageNumber=0&pageSize=100');
+      const response = await axios.get('http://localhost:8081/StockProfile?pageNumber=0&pageSize=20');
       if (response.data.success) {
-        const symbolNames = response.data.data.map(item => item.symbolName);
-        setItems(symbolNames);
+        const items = response.data.data.map(item => ({
+          symbolName: item.symbolName,
+          market: item.market,
+        }));
+        setItems(response.data.data);
       } else {
         console.error('Error fetching symbols:', response.data);
         setError('Failed to fetch symbols');
@@ -82,6 +60,12 @@ const Navbar = ({
   useEffect(() => {
     fetchData();
   }, []);
+
+  // const handleItemSelect = (item) => {
+  //   console.log("item selected",item)
+  //   setSelectedSymbol(item);
+  //   closeModal();
+  // };
 
   return (
     <nav className="navbar">
@@ -97,8 +81,16 @@ const Navbar = ({
           onSelect={onIndicatorSelect}
           label="Indicators"
         />
-        <button onClick={openModal} className="button">Open Modal</button>
-        <Modal show={showModal} onClose={closeModal} items={items} />
+        <button onClick={openModal} className="button">
+          <FontAwesomeIcon icon={faSearch} className="search-icon" /> {selectedSymbol.symbolName}
+        </button>
+        <Modal
+          show={showModal}
+          onClose={closeModal}
+          items={items}
+          setItems={setItems}
+          onItemSelect={onHandleItemSelect}
+        />
       </div>
       {error && <div className="error">{error}</div>}
     </nav>

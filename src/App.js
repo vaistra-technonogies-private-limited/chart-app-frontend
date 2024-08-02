@@ -100,7 +100,9 @@ import Navbar from "./component/navbar";
 function App() {
   const [interval, setInterval] = useState("1minute");
   const [indicators, setIndicators] = useState(["Candlestick"]);
+  const [selectedSymbol, setSelectedSymbol] = useState({ symbolName: 'Nifty Bank', symbol: "NSE_INDEX%7CNifty Bank", market: '' });
 
+  const [showModal, setShowModal] = useState(false);
   const intervalOptions = ["1minute", "30minute"];
   const indicatorOptions = [
     "Candlestick",
@@ -120,6 +122,19 @@ function App() {
     setIndicators(selectedOptions);
   }, []);
 
+  const handleItemSelect = (item) => {
+    console.log("item selected", item)
+    setSelectedSymbol(item);
+    closeModal();
+  };
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="App">
       <Navbar
@@ -127,8 +142,13 @@ function App() {
         indicatorOptions={indicatorOptions}
         onIntervalSelect={handleIntervalSelect}
         onIndicatorSelect={handleIndicatorSelect}
+        onHandleItemSelect={handleItemSelect}
+        openModal={openModal}
+        closeModal={closeModal} 
+        showModal={showModal}
+        selectedSymbol={selectedSymbol} 
       />
-      <ApexChart interval={interval} indicators={indicators} />
+      <ApexChart interval={interval} indicators={indicators} selectedSymbol={selectedSymbol}  />
     </div>
   );
 }
