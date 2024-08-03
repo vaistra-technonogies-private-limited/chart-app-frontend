@@ -42,10 +42,10 @@ const Navbar = ({
     try {
       const response = await axios.get('http://localhost:8081/StockProfile?pageNumber=0&pageSize=20');
       if (response.data.success) {
-        const items = response.data.data.map(item => ({
-          symbolName: item.symbolName,
-          market: item.market,
-        }));
+        // const items = response.data.data.map(item => ({
+        //   symbolName: item.symbolName,
+        //   market: item.market,
+        // }));
         setItems(response.data.data);
       } else {
         console.error('Error fetching symbols:', response.data);
