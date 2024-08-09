@@ -15,9 +15,7 @@ const ApexChart = (props) => {
     change: null,
     percentChange: null,
   });
-  // const [toDate, setToDate] = useState(new Date());
-  // const [fromDate, setFromDate] = useState(new Date());
-  const { interval, indicators, selectedSymbol,handleChangeFromDate,handleChangeToDate,toDate,fromDate } = props;
+  const { interval, indicators, selectedSymbol, handleChangeFromDate, handleChangeToDate, toDate, fromDate } = props;
 
   const fetchData = useCallback(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -36,9 +34,6 @@ const ApexChart = (props) => {
         }));
 
         const closePrices = response.data.map((item) => item[4]);
-
-        console.log("Formatted Data:", formattedData);
-        console.log("Close Prices:", closePrices);
 
         let newSeries = [
           { name: "Candlestick", type: "candlestick", data: formattedData },
@@ -119,40 +114,141 @@ const ApexChart = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, [props, toDate, fromDate, fetchData]);
+  }, [fetchData]);
 
-  // const handleChangeToDate = (date) => {
-  //   setToDate(date);
-  // };
+  useEffect(() => {
+    if(toDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0] && fromDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0]){
+      if(interval === "1minute"){
+        const intervalId = setInterval(() => {
+          // alert("Refresh in every 1 minute")
+          fetchData();
+        }, 60000); // 60000 ms = 1 minute
 
-  // const handleChangeFromDate = (date) => {
-  //   setFromDate(date);
-  // };
+        return () => clearInterval(intervalId);
+      } else{
+        const intervalId = setInterval(() => {
+          // alert("Refresh in every 30 minute")
+          fetchData();
+        }, 1800000); // 1800000 ms = 30 minutes
 
-  const handleMouseMove = (event) => {
-    const chartRect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - chartRect.left;
-    const chartWidth = chartRect.width;
-
-    const dataPoints = series[0].data;
-    const index = Math.floor((x / chartWidth) * dataPoints.length);
-
-    if (index >= 0 && index < dataPoints.length) {
-      const dataPoint = dataPoints[index];
-      const isGreenCandle = dataPoint.y[3] > dataPoint.y[0];
-      const change = dataPoint.y[3] - dataPoint.y[0];
-      const percentChange = ((change / dataPoint.y[0]) * 100).toFixed(2);
-      setOhlc({
-        open: dataPoint.y[0],
-        high: dataPoint.y[1],
-        low: dataPoint.y[2],
-        close: dataPoint.y[3],
-        isGreenCandle: isGreenCandle,
-        change: change.toFixed(2),
-        percentChange: percentChange,
-      });
+        return () => clearInterval(intervalId);
+      }
     }
-  };
+  }, [fetchData,fromDate,toDate,interval]);
+
+  // const handleMouseMove = (event) => {
+  //   const chartRect = event.currentTarget.getBoundingClientRect();
+  //   const x = event.clientX - chartRect.left;
+  //   const chartWidth = chartRect.width;
+
+  //   const dataPoints = series[0].data;
+  //   const index = Math.floor((x / chartWidth) * dataPoints.length);
+
+  //   if (index >= 0 && index < dataPoints.length) {
+  //     const dataPoint = dataPoints[index];
+  //     const isGreenCandle = dataPoint.y[3] > dataPoint.y[0];
+  //     const change = dataPoint.y[3] - dataPoint.y[0];
+  //     const percentChange = ((change / dataPoint.y[0]) * 100).toFixed(2);
+  //     setOhlc({
+  //       open: dataPoint.y[0],
+  //       high: dataPoint.y[1],
+  //       low: dataPoint.y[2],
+  //       close: dataPoint.y[3],
+  //       isGreenCandle: isGreenCandle,
+  //       change: change.toFixed(2),
+  //       percentChange: percentChange,
+  //     });
+  //   }
+  // };
+
+  // const handleMouseMove = (event) => {
+  //   const chartRect = event.currentTarget.getBoundingClientRect();
+  //   const x = event.clientX - chartRect.left;
+  //   const chartWidth = chartRect.width;
+
+  //   // Get data points from the first series
+  //   const dataPoints = series[0].data;
+  //   console.log(dataPoints)
+
+  //   // Calculate index based on x-coordinate
+  //   const index = Math.floor((x / chartWidth) * dataPoints.length);
+  //   console.log(index);
+
+  //   // Ensure index is within valid range
+  //   if (index >= 0 && index < dataPoints.length) {
+  //     const dataPoint = dataPoints[index];
+
+  //     console.log(dataPoint)
+  //     console.log(dataPoints[index])
+
+  //     if (dataPoint && dataPoint.y) {
+  //       const isGreenCandle = dataPoint.y[3] > dataPoint.y[0];
+  //       const change = dataPoint.y[3] - dataPoint.y[0];
+  //       const percentChange = ((change / dataPoint.y[0]) * 100).toFixed(2);
+  //       setOhlc({
+  //         open: dataPoint.y[0],
+  //         high: dataPoint.y[1],
+  //         low: dataPoint.y[2],
+  //         close: dataPoint.y[3],
+  //         isGreenCandle: isGreenCandle,
+  //         change: change.toFixed(2),
+  //         percentChange: percentChange,
+  //       });
+  //     }
+  //   }
+  // };
+
+  // const getYAxisWidth = () => {
+  //   const yAxisElement = document.querySelector('.apexcharts-yaxis'); // Adjust selector as needed
+  //   if (yAxisElement) {
+  //     return yAxisElement.getBoundingClientRect().width;
+  //   }
+  //   return 50; // Default to 0 if y-axis labels are not found
+  // };
+
+  // const handleMouseMove = (event) => {
+  //   const chartRect = event.currentTarget.getBoundingClientRect();
+  //   const initialX = event.clientX - chartRect.left;
+
+  //   const yAxisWidth = getYAxisWidth();
+  //   const x = initialX - yAxisWidth;
+
+  //   const chartWidth = chartRect.width - yAxisWidth;
+
+  //   const dataPoints = series[0].data;
+  //   console.log("Total dataPoints", dataPoints.length)
+
+  //   let index = Math.floor((x / chartWidth) * dataPoints.length);
+  //   index = Math.max(0, Math.min(index, dataPoints.length - 1));
+  //   // Calculate reversed index directly
+  //   const reversedIndex = dataPoints.length - 1 - index;
+
+  //   if (reversedIndex >= 0 && reversedIndex < dataPoints.length) {
+  //     const dataPoint = dataPoints[reversedIndex-1];
+  //     // Ensure dataPoint is an array and has at least 5 values
+  //     // if (Array.isArray(dataPoint.data)) {
+  //     //   const [open, high, low, close] = dataPoint;
+  //     //   const isGreenCandle = close > open;
+  //     //   const change = close - open;
+  //     //   const percentChange = ((change / open) * 100).toFixed(2);
+
+  //     //   setOhlc({
+  //     //     open,
+  //     //     high,
+  //     //     low,
+  //     //     close,
+  //     //     isGreenCandle,
+  //     //     change: change.toFixed(2),
+  //     //     percentChange,
+  //     //   });
+  //     // } else {
+  //     //   // console.log("Invalid dataPoint or dataPoint has insufficient length");
+  //     // }
+  //   }
+  //    else {
+  //     console.log("Reversed Index out of bounds");
+  //   }
+  // };
 
   const ohlcColor = ohlc.isGreenCandle ? "#098E09" : "#FF0000";
 
@@ -167,7 +263,7 @@ const ApexChart = (props) => {
       },
       toolbar: {
         tools: {
-          zoom: false,
+          zoom: true,
           zoomin: true,
           zoomout: true,
           pan: true,
@@ -182,13 +278,14 @@ const ApexChart = (props) => {
       },
     },
     yaxis: {
+      opposite: false, // Move y-axis to the right side
       labels: {
         formatter: function (value) {
           return value.toFixed(2);
         },
       },
       tooltip: {
-        enabled: true,
+        enabled: false,
       },
     },
     tooltip: {
@@ -242,7 +339,9 @@ const ApexChart = (props) => {
         )}
       </div>
 
-      <div id="chart" onMouseMove={handleMouseMove}>
+      <div id="chart"
+      // onMouseMove={handleMouseMove}
+      >
         <ReactApexChart
           options={options}
           series={series}

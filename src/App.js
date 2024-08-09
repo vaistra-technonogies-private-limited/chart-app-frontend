@@ -33,9 +33,10 @@ function App() {
     const to = new Date(toDate).getTime();
     const differenceInDays = (to - from) / (1000 * 3600 * 24);
 
-    if (differenceInDays <= 1) {
+    if (differenceInDays <= 2) {
       setIntervalOptions(["1minute", "30minute"]);
-    } else if (differenceInDays <= 7) {
+    } 
+    else if (differenceInDays <= 7) {
       setIntervalOptions(["30minute", "day"]);
     } else {
       setIntervalOptions(["day", "week", "month"]);
