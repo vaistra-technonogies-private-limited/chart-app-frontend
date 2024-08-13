@@ -343,4 +343,16 @@
   gap: 8px; /* Adjust the gap as needed */
 }
 
+.apexcharts-tooltip-candlestick {
+  background: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: "15px";
+  font-family: "Arial, sans-serif";
+}
+
+.apexcharts-tooltip-span-candlestick {
+  padding-top: 10px;
+}
 

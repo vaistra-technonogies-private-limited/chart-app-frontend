@@ -117,15 +117,15 @@ const ApexChart = (props) => {
   }, [fetchData]);
 
   useEffect(() => {
-    if(toDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0] && fromDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0]){
-      if(interval === "1minute"){
+    if (toDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0] && fromDate.toISOString().split('T')[0] === new Date().toISOString().split('T')[0]) {
+      if (interval === "1minute") {
         const intervalId = setInterval(() => {
           // alert("Refresh in every 1 minute")
           fetchData();
         }, 60000); // 60000 ms = 1 minute
 
         return () => clearInterval(intervalId);
-      } else{
+      } else {
         const intervalId = setInterval(() => {
           // alert("Refresh in every 30 minute")
           fetchData();
@@ -134,134 +134,21 @@ const ApexChart = (props) => {
         return () => clearInterval(intervalId);
       }
     }
-  }, [fetchData,fromDate,toDate,interval]);
-
-  // const handleMouseMove = (event) => {
-  //   const chartRect = event.currentTarget.getBoundingClientRect();
-  //   const x = event.clientX - chartRect.left;
-  //   const chartWidth = chartRect.width;
-
-  //   const dataPoints = series[0].data;
-  //   const index = Math.floor((x / chartWidth) * dataPoints.length);
-
-  //   if (index >= 0 && index < dataPoints.length) {
-  //     const dataPoint = dataPoints[index];
-  //     const isGreenCandle = dataPoint.y[3] > dataPoint.y[0];
-  //     const change = dataPoint.y[3] - dataPoint.y[0];
-  //     const percentChange = ((change / dataPoint.y[0]) * 100).toFixed(2);
-  //     setOhlc({
-  //       open: dataPoint.y[0],
-  //       high: dataPoint.y[1],
-  //       low: dataPoint.y[2],
-  //       close: dataPoint.y[3],
-  //       isGreenCandle: isGreenCandle,
-  //       change: change.toFixed(2),
-  //       percentChange: percentChange,
-  //     });
-  //   }
-  // };
-
-  // const handleMouseMove = (event) => {
-  //   const chartRect = event.currentTarget.getBoundingClientRect();
-  //   const x = event.clientX - chartRect.left;
-  //   const chartWidth = chartRect.width;
-
-  //   // Get data points from the first series
-  //   const dataPoints = series[0].data;
-  //   console.log(dataPoints)
-
-  //   // Calculate index based on x-coordinate
-  //   const index = Math.floor((x / chartWidth) * dataPoints.length);
-  //   console.log(index);
-
-  //   // Ensure index is within valid range
-  //   if (index >= 0 && index < dataPoints.length) {
-  //     const dataPoint = dataPoints[index];
-
-  //     console.log(dataPoint)
-  //     console.log(dataPoints[index])
-
-  //     if (dataPoint && dataPoint.y) {
-  //       const isGreenCandle = dataPoint.y[3] > dataPoint.y[0];
-  //       const change = dataPoint.y[3] - dataPoint.y[0];
-  //       const percentChange = ((change / dataPoint.y[0]) * 100).toFixed(2);
-  //       setOhlc({
-  //         open: dataPoint.y[0],
-  //         high: dataPoint.y[1],
-  //         low: dataPoint.y[2],
-  //         close: dataPoint.y[3],
-  //         isGreenCandle: isGreenCandle,
-  //         change: change.toFixed(2),
-  //         percentChange: percentChange,
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const getYAxisWidth = () => {
-  //   const yAxisElement = document.querySelector('.apexcharts-yaxis'); // Adjust selector as needed
-  //   if (yAxisElement) {
-  //     return yAxisElement.getBoundingClientRect().width;
-  //   }
-  //   return 50; // Default to 0 if y-axis labels are not found
-  // };
-
-  // const handleMouseMove = (event) => {
-  //   const chartRect = event.currentTarget.getBoundingClientRect();
-  //   const initialX = event.clientX - chartRect.left;
-
-  //   const yAxisWidth = getYAxisWidth();
-  //   const x = initialX - yAxisWidth;
-
-  //   const chartWidth = chartRect.width - yAxisWidth;
-
-  //   const dataPoints = series[0].data;
-  //   console.log("Total dataPoints", dataPoints.length)
-
-  //   let index = Math.floor((x / chartWidth) * dataPoints.length);
-  //   index = Math.max(0, Math.min(index, dataPoints.length - 1));
-  //   // Calculate reversed index directly
-  //   const reversedIndex = dataPoints.length - 1 - index;
-
-  //   if (reversedIndex >= 0 && reversedIndex < dataPoints.length) {
-  //     const dataPoint = dataPoints[reversedIndex-1];
-  //     // Ensure dataPoint is an array and has at least 5 values
-  //     // if (Array.isArray(dataPoint.data)) {
-  //     //   const [open, high, low, close] = dataPoint;
-  //     //   const isGreenCandle = close > open;
-  //     //   const change = close - open;
-  //     //   const percentChange = ((change / open) * 100).toFixed(2);
-
-  //     //   setOhlc({
-  //     //     open,
-  //     //     high,
-  //     //     low,
-  //     //     close,
-  //     //     isGreenCandle,
-  //     //     change: change.toFixed(2),
-  //     //     percentChange,
-  //     //   });
-  //     // } else {
-  //     //   // console.log("Invalid dataPoint or dataPoint has insufficient length");
-  //     // }
-  //   }
-  //    else {
-  //     console.log("Reversed Index out of bounds");
-  //   }
-  // };
+  }, [fetchData, fromDate, toDate, interval]);
 
   const ohlcColor = ohlc.isGreenCandle ? "#098E09" : "#FF0000";
 
-  const options = {
+  const [options, setOptions] = useState({
     chart: {
       type: "candlestick",
       height: 300,
       zoom: {
         enabled: true,
-        type: "xy",
+        type: "x",
         autoScaleYaxis: true,
       },
       toolbar: {
+        show: true,
         tools: {
           zoom: true,
           zoomin: true,
@@ -269,13 +156,100 @@ const ApexChart = (props) => {
           pan: true,
           reset: true,
         },
+        autoSelected: "pan" // Default tool selected on chart load
+      },
+      //   animations: {
+      //     enabled: true,       // Enable or disable animations
+      //     easing: "easeinout", // Type of easing for animations
+      //     speed: 800,          // Speed of the animation in milliseconds
+      //     animateGradually: {
+      //         enabled: true,
+      //         delay: 150       // Delay between each data point animation in milliseconds
+      //     },
+      //     dynamicAnimation: {
+      //         enabled: true,
+      //         speed: 350        // Speed of dynamic animations in milliseconds
+      //     }
+      // },
+      background: "#ffffff",   // Background color of the chart
+      foreColor: "#333",       // Default text color for the chart
+      dropShadow: {
+        enabled: false,      // Add drop shadow to chart elements
+        top: 2,
+        left: 2,
+        blur: 2,
+        opacity: 0.2
       },
     },
     xaxis: {
       type: "datetime",
       labels: {
         datetimeUTC: false,
+        format: 'hh-mm TT',    // Customize the date format displayed on the x-axis
+        rotate: -45,
+        style: {
+          colors: "#333",  // Color of the labels
+          fontSize: "12px", // Font size of the labels
+          fontFamily: "Arial, sans-serif",
+        },
+        offsetX: 0,           // Horizontal offset for labels
+        offsetY: 0,           // Vertical offset for labels
       },
+      // range: 3600000, // Set default range to 1 hour in milliseconds
+      // scrollbar: {
+      //   enabled: true,
+      //   height: 20,
+      //   offsetX: 0,
+      //   offsetY: 0,
+      //   barHeight: 10,
+      //   trackHeight: 10,
+      //   handleHeight: 15,
+      // },
+      title: {
+        text: "Date & Time",         // Title of the x-axis
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: "#333",    // Color of the title text
+          fontSize: "14px",
+          fontFamily: "Arial, sans-serif",
+        }
+      },
+      // tickAmount: 6,            // Number of ticks on the x-axis
+      crosshairs: {
+        show: true,           // Display crosshairs for better data alignment
+        width: 1,
+        position: 'back',
+        opacity: 0.9,
+        stroke: {
+          color: '#333',
+          width: 1,
+          dashArray: 0
+        },
+      },
+      axisBorder: {
+        show: true,
+        color: '#333',
+        height: 1,
+        width: '100%',
+        offsetX: 0,
+        offsetY: 0
+      },
+      axisTicks: {
+        show: true,
+        borderType: 'solid',
+        color: '#333',
+        height: 6,
+        offsetX: 0,
+        offsetY: 0
+      },
+      tooltip: {
+        enabled: true,
+      },
+      range: series[0].data.length > 0
+      ? (new Date(series[0].data[series[0].data.length - 1].x).getTime() -
+         new Date(series[0].data[0].x).getTime()) * 1.1 // Increase range by 10%
+      : undefined, // This condition handles an empty series
     },
     yaxis: {
       opposite: false, // Move y-axis to the right side
@@ -283,22 +257,103 @@ const ApexChart = (props) => {
         formatter: function (value) {
           return value.toFixed(2);
         },
+        style: {
+          colors: "#333",
+          fontSize: "11px",
+          fontFamily: "Arial, sans-serif",
+        },
+        offsetX: 0,
+        offsetY: 0,
+      },
+      forceNiceScale: true,       // Ensures evenly distributed ticks
+      crosshairs: {
+        show: true,
+        width: 1,
+        position: 'back',
+        opacity: 0.9,
+        stroke: {
+          color: '#333',
+          width: 1,
+          dashArray: 0
+        },
+      },
+      axisBorder: {
+        show: true,
+        color: '#333',
+        offsetX: -7,
+        offsetY: -7
+      },
+      axisTicks: {
+        show: true,
+        borderType: 'solid',
+        color: '#333',
+        height: 6,
+        offsetX: 0,
+        offsetY: 0
       },
       tooltip: {
-        enabled: false,
-      },
+        enabled: true,
+      }
     },
     tooltip: {
-      y: {
-        formatter: function (value) {
-          return value.toFixed(2);
-        },
+      enabled: true, // Enable or disable the tooltip
+      custom: function ({ seriesIndex, dataPointIndex, w }) {
+        // Get the OHLC values
+        const open = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
+        const high = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
+        const low = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
+        const close = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
+        const isGreenCandle = close > open;
+
+        // Calculate change and percentage change
+        const change = (close - open).toFixed(2);
+        const percentChange = ((change / open) * 100).toFixed(2);
+
+        setOhlc({
+          open: open,
+          high: high,
+          low: low,
+          close: close,
+          isGreenCandle: isGreenCandle,
+          change: change,
+          percentChange: percentChange,
+        });
+
+        // Return the custom tooltip content
+        return `
+          <div class="apexcharts-tooltip-candlestick">
+            <span class="apexcharts-tooltip-span-candlestick">Open: ${open.toFixed(2)}</span><br><br>
+            <span class="apexcharts-tooltip-span-candlestick">High: ${high.toFixed(2)}</span><br><br>
+            <span class="apexcharts-tooltip-span-candlestick">Low: ${low.toFixed(2)}</span><br><br>
+            <span class="apexcharts-tooltip-span-candlestick">Close: ${close.toFixed(2)}</span><br><br>
+            <span class="apexcharts-tooltip-span-candlestick">Change: ${change}
+            (${percentChange}%)</span><br><br>
+          </div>
+        `;
+      },
+      shared: true,  // Display tooltip for all series at the hovered x-axis value
+      followCursor: true, // Makes tooltip follow the cursor as it moves
+      theme: "dark", // Set the theme of the tooltip (light, dark)
+      style: {
+        fontSize: "12px", // Font size of the tooltip
+        fontFamily: "Arial, sans-serif", // Font family of the tooltip
+      },
+      fillSeriesColor: true, // Use the series color in the tooltip
+      onDatasetHover: {
+        highlightDataSeries: true, // Highlight the series when hovering over a dataset
+      },
+      x: {
+        show: true,
+        format: "dd MMM hh:mm TT", // Date format if x-axis is datetime
+        // formatter: function (value) {
+        //   return new Date(value).toLocaleDateString(); // Custom format for x-axis value
+        // },
       },
     },
     legend: {
       show: false,
     },
-  };
+  });
 
   return (
     <div>
@@ -339,9 +394,7 @@ const ApexChart = (props) => {
         )}
       </div>
 
-      <div id="chart"
-      // onMouseMove={handleMouseMove}
-      >
+      <div id="chart">
         <ReactApexChart
           options={options}
           series={series}
