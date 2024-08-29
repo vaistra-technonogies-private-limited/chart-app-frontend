@@ -3,9 +3,11 @@ import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 import { SMA, BollingerBands } from "technicalindicators";
 import DatePickerComponent from './component/datePicker/index';
+import VolumeChart from "./VolumeChart";
 
 const ApexChart = (props) => {
   const [series, setSeries] = useState([{ name: "Candlestick", type: "candlestick", data: [] }]);
+  const [volumeData, setVolumeData] = useState([]);
   const [ohlc, setOhlc] = useState({
     open: null,
     high: null,
@@ -34,6 +36,13 @@ const ApexChart = (props) => {
         }));
 
         const closePrices = response.data.map((item) => item[4]);
+        // const volumes = response.data.map((item) => item[5]);
+        const volumes = response.data.map((item) => ({
+          x: new Date(item[0]),
+          y: item[5],
+        }));
+
+        setVolumeData(volumes); // Set volume data
 
         let newSeries = [
           { name: "Candlestick", type: "candlestick", data: formattedData },
@@ -100,11 +109,19 @@ const ApexChart = (props) => {
                 data: middleBandData,
               });
             }
+
+            // if (indicators.includes("24-hour volume")) {
+            //   console.log("Volume data:", volumes);
+            //   newSeries.push({
+            //     name: "24-Hour Volume",
+            //     type: "column",
+            //     data: volumes,
+            //   });
+            // }
           } else {
             console.warn("Not enough data points for Bollinger Bands");
           }
         }
-
         setSeries(newSeries);
       })
       .catch((error) => {
@@ -141,7 +158,7 @@ const ApexChart = (props) => {
   const [options, setOptions] = useState({
     chart: {
       type: "candlestick",
-      height: 300,
+      height: 400,
       zoom: {
         enabled: true,
         type: "x",
@@ -247,15 +264,23 @@ const ApexChart = (props) => {
         enabled: true,
       },
       range: series[0].data.length > 0
-      ? (new Date(series[0].data[series[0].data.length - 1].x).getTime() -
-         new Date(series[0].data[0].x).getTime()) * 1.1 // Increase range by 10%
-      : undefined, // This condition handles an empty series
+        ? (new Date(series[0].data[series[0].data.length - 1].x).getTime() -
+          new Date(series[0].data[0].x).getTime()) * 1.1 // Increase range by 10%
+        : undefined, // This condition handles an empty series
     },
     yaxis: {
       opposite: false, // Move y-axis to the right side
       labels: {
         formatter: function (value) {
-          return value.toFixed(2);
+          if (value >= 1e9) {
+            return (value / 1e9).toFixed(1) + "B"; // Format as billion
+          } else if (value >= 1e6) {
+            return (value / 1e6).toFixed(1) + "M"; // Format as million
+          } else if (value >= 1e3) {
+            return (value / 1e3).toFixed(1) + "K"; // Format as thousand
+          } else {
+            return value.toFixed(2); // Display the original number if it's small
+          }
         },
         style: {
           colors: "#333",
@@ -327,7 +352,7 @@ const ApexChart = (props) => {
             <span class="apexcharts-tooltip-span-candlestick">Low: ${low.toFixed(2)}</span><br><br>
             <span class="apexcharts-tooltip-span-candlestick">Close: ${close.toFixed(2)}</span><br><br>
             <span class="apexcharts-tooltip-span-candlestick">Change: ${change}
-            (${percentChange}%)</span><br><br>
+            (${percentChange}%)</span><br>
           </div>
         `;
       },
@@ -394,16 +419,16 @@ const ApexChart = (props) => {
         )}
       </div>
 
-      <div id="chart">
+      <div id="chart ohlc-header">
         <ReactApexChart
           options={options}
           series={series}
           type="candlestick"
-          height={750}
+          height={742}
         />
       </div>
 
-      <div id="html-dist"></div>
+      {/* <VolumeChart volumeData={volumeData} /> Render VolumeChart component below the candlestick chart */}
     </div>
   );
 };

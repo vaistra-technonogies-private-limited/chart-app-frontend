@@ -1,9 +1,9 @@
 /* src/App.css */
 
 /* Navbar styling */
-.navbar {
-  display: flex;
-  justify-content: space-between;
+.navbars {
+  /* display: flex; */
+  /* justify-content: space-between; */
   align-items: center;
   background-color: #1c1f25;
   padding: 1rem 2rem;
@@ -12,10 +12,10 @@
 }
 
 /* Navbar title */
-.navbar h1 {
+.navbars h1 {
   margin: 0;
-  width: 300px;
-  font-size: 1.5rem;
+  /* width: 300px; */
+  font-size: 1.3rem;
   font-weight: bold;
 }
 
@@ -23,12 +23,13 @@
 .dropdowns {
   display: flex;
   gap: 1rem;
-  margin-left: 20px;
+  align-items: center;
+  /* margin-left: 20px; */
 }
 
 /* Individual dropdown container */
 .dropdowns {
-  width: 100%;
+  /* width: 100%; */
   position: relative;
 }
 
@@ -255,7 +256,7 @@
 
 /* Modal search box styling */
 .search-box {
-  width: 95%;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -274,7 +275,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 500px; /* Adjust as needed */
+  max-height: 430px; /* Adjust as needed */
   overflow-y: auto;
 }
 
@@ -335,6 +336,11 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .chart-container {
+    flex-direction: row; /* Stack horizontally on larger screens */
+  }
+
 }
 
 .button {
@@ -356,3 +362,16 @@
   padding-top: 10px;
 }
 
+.chart-container {
+  display: flex;
+  flex-direction: column; /* Stack vertically */
+}
+
+#chart, #volume-chart {
+  flex: 1;
+  margin: 10px;
+}
+
+.div-bgground{
+  background-color: #1c1f25;
+}

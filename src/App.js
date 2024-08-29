@@ -18,6 +18,7 @@ function App() {
     "Bollinger Upper Band",
     "Bollinger Lower Band",
     "Bollinger Middle Band",
+    "24-hour volume",
   ];
 
   const handleChangeToDate = (date) => {
@@ -35,7 +36,7 @@ function App() {
 
     if (differenceInDays <= 2) {
       setIntervalOptions(["1minute", "30minute"]);
-    } 
+    }
     else if (differenceInDays <= 7) {
       setIntervalOptions(["30minute", "day"]);
     } else {
@@ -72,18 +73,29 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar
-        intervalOptions={intervalOptions}
-        indicatorOptions={indicatorOptions}
-        onIntervalSelect={handleIntervalSelect}
-        onIndicatorSelect={handleIndicatorSelect}
-        onHandleItemSelect={handleItemSelect}
-        openModal={openModal}
-        closeModal={closeModal}
-        showModal={showModal}
-        selectedSymbol={selectedSymbol}
-      />
-      <ApexChart interval={interval} indicators={indicators} selectedSymbol={selectedSymbol} handleChangeToDate={handleChangeToDate} handleChangeFromDate={handleChangeFromDate} toDate={toDate} fromDate={fromDate} />
+      <div className="row">
+        <div className="col-md-12 div-bgground">
+          <Navbar
+            intervalOptions={intervalOptions}
+            indicatorOptions={indicatorOptions}
+            onIntervalSelect={handleIntervalSelect}
+            onIndicatorSelect={handleIndicatorSelect}
+            onHandleItemSelect={handleItemSelect}
+            openModal={openModal}
+            closeModal={closeModal}
+            showModal={showModal}
+            selectedSymbol={selectedSymbol}
+          />
+          <div>
+            <ApexChart interval={interval} indicators={indicators} selectedSymbol={selectedSymbol} handleChangeToDate={handleChangeToDate} handleChangeFromDate={handleChangeFromDate} toDate={toDate} fromDate={fromDate} />
+          </div>
+        </div>
+        {/* <div className="col-md-2 div-bgground">
+        </div> */}
+
+      </div>
+
+
     </div>
   );
 }

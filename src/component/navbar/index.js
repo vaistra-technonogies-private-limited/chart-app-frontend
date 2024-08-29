@@ -15,7 +15,7 @@ const Navbar = ({
   closeModal,
   openModal,
   showModal,
-  selectedSymbol 
+  selectedSymbol
 }) => {
   // const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([]);
@@ -68,32 +68,42 @@ const Navbar = ({
   // };
 
   return (
-    <nav className="navbar">
-      <h1>Vaistra Trade Analytics</h1>
-      <div className="dropdowns">
-        <Dropdown
-          options={intervalOptions}
-          onSelect={onIntervalSelect}
-          label="Interval"
-        />
-        <IndicatorsDropdown
-          options={indicatorOptions}
-          onSelect={onIndicatorSelect}
-          label="Indicators"
-        />
-        <button onClick={openModal} className="button">
-          <FontAwesomeIcon icon={faSearch} className="search-icon" /> {selectedSymbol.symbolName}
-        </button>
-        <Modal
-          show={showModal}
-          onClose={closeModal}
-          items={items}
-          setItems={setItems}
-          onItemSelect={onHandleItemSelect}
-        />
+    <div className="navbars">
+      <div className="row">
+        <div className="col-lg-2 col-sm-4 col align-content-center">
+          <h1>Vaistra Trade Analytics</h1>
+        </div>
+        <div className="col-lg-8 col-sm-6 col align-content-center">
+          <div className="dropdowns">
+            <Dropdown
+              options={intervalOptions}
+              onSelect={onIntervalSelect}
+              label="Interval"
+            />
+            <IndicatorsDropdown
+              options={indicatorOptions}
+              onSelect={onIndicatorSelect}
+              label="Indicators"
+            />
+          </div>
+        </div>
+        <div className="col-lg-2 col-sm-2 col align-content-center">
+          <div className="dropdowns">
+            <button onClick={openModal} className="button">
+              <FontAwesomeIcon icon={faSearch} className="search-icon" /> {selectedSymbol.symbolName}
+            </button>
+            <Modal
+              show={showModal}
+              onClose={closeModal}
+              items={items}
+              setItems={setItems}
+              onItemSelect={onHandleItemSelect}
+            />
+          </div>
+        </div>
       </div>
       {error && <div className="error">{error}</div>}
-    </nav>
+    </div>
   );
 };
 
